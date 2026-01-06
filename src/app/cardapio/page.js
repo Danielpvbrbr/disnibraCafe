@@ -109,7 +109,6 @@ export default function Cardapio() {
                 </S.PrecoWrapper>
               </S.InputGroup>
 
-              {/* Espaço reservado ou outro campo pequeno se precisar */}
               <div style={{ flex: 1 }} />
             </S.InputRow>
 

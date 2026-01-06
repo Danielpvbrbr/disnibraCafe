@@ -22,9 +22,9 @@ export const Header = styled.header`
 
 export const ProductGrid = styled.div`
   display: grid;
-  /* Garante que o card tenha exatamente 100px ou preencha o espaço mantendo a proporção */
-  grid-template-columns: repeat(auto-fill, 240px);
-  gap: 16px;
+
+  grid-template-columns: repeat(auto-fill, 340px);
+  gap: 10px;
   justify-content: center;
 
   @media (min-width: 768px) {
