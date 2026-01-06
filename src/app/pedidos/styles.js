@@ -9,11 +9,11 @@ export const Container = styled.div`
   padding: 20px;
   max-width: 1400px; /* Tela de pedidos pode ser mais larga */
   margin: 0 auto;
-  @media (min-width: 768px) { padding: 40px; }
+  @media (min-width: 768px) { padding: 15px; }
 `;
 
 export const Header = styled.header`
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   h1 { font-size: 32px; font-weight: 900; color: #1c1c1c; 
        span { color: #ff6b00; } }
   p { color: #71717a; font-weight: 500; }
@@ -22,7 +22,7 @@ export const Header = styled.header`
 export const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
+  gap: 10px;
 `;
 
 export const OrderCard = styled.div`

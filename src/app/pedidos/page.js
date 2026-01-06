@@ -26,7 +26,7 @@ export default function Pedidos() {
       ]
     },
     {
-      id: 2,
+      id: 3,
       mesa: "Mesa 03",
       horario: "14:30",
       itens: [
@@ -35,7 +35,7 @@ export default function Pedidos() {
       ]
     },
     {
-      id: 2,
+      id: 4,
       mesa: "Mesa 06",
       horario: "14:30",
       itens: [
@@ -43,8 +43,8 @@ export default function Pedidos() {
         { nome: "Bolo de Cenoura", qtd: 1 }
       ]
     },
-        {
-      id: 2,
+    {
+      id: 5,
       mesa: "Mesa 08",
       horario: "14:30",
       itens: [
@@ -52,8 +52,8 @@ export default function Pedidos() {
         { nome: "Bolo de Cenoura", qtd: 1 }
       ]
     },
-        {
-      id: 2,
+    {
+      id: 6,
       mesa: "Mesa 10",
       horario: "14:30",
       itens: [
@@ -72,7 +72,7 @@ export default function Pedidos() {
     <S.Container>
       <S.Header>
         <S.TitleGroup>
-          <h1>Cozinha & <span>Pedidos</span></h1>
+          <h1>Cozinha / <span>Pedidos</span></h1>
           <p>Pedidos recebidos via QR Code em tempo real.</p>
         </S.TitleGroup>
       </S.Header>
