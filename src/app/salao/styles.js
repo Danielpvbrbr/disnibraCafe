@@ -105,7 +105,7 @@ export const QRWrapper = styled.div`
 
 // BOTÃO LARANJA PRINCIPAL
 export const AddButton = styled.button`
-  background: #ff6b00; /* Laranja vibrante */
+  background: #203E9E; /* Laranja vibrante */
   color: white;
   padding: 14px 28px;
   border-radius: 18px;
@@ -144,15 +144,15 @@ export const CardHeader = styled.div`
 export const StatusDot = styled.div`
   width: 8px;
   height: 8px;
-  background: #ff6b00; /* Dot laranja */
+  background: #203E9E; 
   border-radius: 50%;
   animation: ${pulse} 2s infinite;
 `;
 
 export const PrintButton = styled.button`
   width: 100%;
-  background: #fff5ed; /* Laranja bem clarinho */
-  color: #ff6b00;
+  background: #fff5ed; 
+  color: #203E9E;
   border: none;
   padding: 8px;
   border-radius: 12px;
@@ -164,7 +164,7 @@ export const PrintButton = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    background: #ff6b00;
+    background: #203E9E;
     color: white;
   }
 `;
@@ -212,7 +212,7 @@ export const InputGroup = styled.div`
     font-size: 12px;
     font-weight: 800;
     text-transform: uppercase;
-    color: #ff6b00;
+    color: #203E9E;
     margin-left: 4px;
   }
 `;
@@ -220,7 +220,7 @@ export const InputGroup = styled.div`
 export const Input = styled.input`
   width: 100%;
   padding: 16px;
-  background: #f8f8f8;
+  background: #FFF;
   border: 2px solid transparent;
   border-radius: 16px;
   margin-top: 8px;
@@ -228,10 +228,11 @@ export const Input = styled.input`
   font-weight: 500;
   outline: none;
   transition: all 0.2s;
-  color: #ff6b00;
+  color: #203E9E;
+
   &:focus {
     background: white;
-    border-color: #ff6b00;
+    border-color: #203E9E;
     box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1);
   }
 `;

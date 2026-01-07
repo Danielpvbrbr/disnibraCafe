@@ -49,7 +49,21 @@ export default function Pedidos() {
       horario: "14:30",
       itens: [
         { nome: "Expresso Tradicional", qtd: 3 },
-        { nome: "Bolo de Cenoura", qtd: 1 }
+        { nome: "Bolo de Cenoura", qtd: 3 },
+        { nome: "Expresso Tradicional", qtd: 3 },
+        { nome: "Bolo de Cenoura", qtd: 3 },
+        { nome: "Expresso Tradicional", qtd: 3 },
+        { nome: "Bolo de Cenoura", qtd: 3 },
+        { nome: "Expresso Tradicional", qtd: 3 },
+        { nome: "Bolo de Cenoura", qtd: 3 },
+        { nome: "Expresso Tradicional", qtd: 3 },
+        { nome: "Bolo de Cenoura", qtd: 3 },
+        { nome: "Expresso Tradicional", qtd: 3 },
+        { nome: "Bolo de Cenoura", qtd: 3 },
+        { nome: "Expresso Tradicional", qtd: 3 },
+        { nome: "Bolo de Cenoura", qtd: 3 },
+        { nome: "Expresso Tradicional", qtd: 3 },
+        { nome: "Bolo de Cenoura", qtd: 3 }
       ]
     },
     {
@@ -63,7 +77,7 @@ export default function Pedidos() {
     }
   ]);
 
-  // Função para remover o pedido quando o garçom concluir
+
   const finalizarPedido = (id) => {
     setPedidos(pedidos.filter(p => p.id !== id));
   };
@@ -99,7 +113,6 @@ export default function Pedidos() {
 
             <S.OrderFooter>
               <S.DoneButton onClick={() => finalizarPedido(pedido.id)}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 Marcar como Pronto
               </S.DoneButton>
             </S.OrderFooter>

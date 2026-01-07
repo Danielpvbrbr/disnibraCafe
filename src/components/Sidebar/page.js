@@ -25,7 +25,7 @@ export default function Sidebar() {
 
       <S.SidebarContainer $isOpen={isOpen}>
         <S.LogoArea>
-          <h1>Disnibra <span>Café</span></h1>
+          <h1>DISNIBRA<span>CAFÉ</span></h1>
         </S.LogoArea>
 
         <S.NavList>

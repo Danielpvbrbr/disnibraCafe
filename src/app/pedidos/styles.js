@@ -15,7 +15,7 @@ export const Container = styled.div`
 export const Header = styled.header`
   margin-bottom: 10px;
   h1 { font-size: 32px; font-weight: 900; color: #1c1c1c; 
-       span { color: #ff6b00; } }
+       span { color: #203E9E; } }
   p { color: #71717a; font-weight: 500; }
 `;
 
@@ -29,7 +29,7 @@ export const OrderCard = styled.div`
   background: white;
   border-radius: 24px;
   border: 1px solid #f4f4f5;
-  border-top: 8px solid #ff6b00;
+  border-top: 8px solid #203E9E;
   display: flex;
   flex-direction: column;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
@@ -60,7 +60,7 @@ export const OrderHeader = styled.div`
   .time {
     font-size: 13px;
     font-weight: 700;
-    color: #ff6b00;
+    color: #203E9E;
     background: #fff5ed;
     padding: 4px 10px;
     border-radius: 8px;
@@ -110,7 +110,7 @@ export const OrderFooter = styled.div`
 
 export const DoneButton = styled.button`
   width: 100%;
-  background: #ff6b00;
+  background: #203E9E;
   color: white;
   border: none;
   padding: 5px;
@@ -136,7 +136,7 @@ export const TitleGroup = styled.div`
     font-weight: 900; 
     color: #1c1c1c; 
     margin: 0; 
-    span { color: #ff6b00; } 
+    span { color: #203E9E; } 
   }
   p { 
     color: #71717a; 

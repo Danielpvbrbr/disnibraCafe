@@ -20,7 +20,7 @@ export const SidebarContainer = styled.aside`
 
 
 export const LogoArea = styled.div`
-  padding: 28px 24px;
+  padding: 12px;
   border-bottom: 1px solid #f4f4f5;
 
   h1 {
@@ -28,9 +28,9 @@ export const LogoArea = styled.div`
     font-weight: 800;
     color: #111827;
     letter-spacing: -0.3px;
-
+    text-align: center;
     span {
-      color: #ff6b00;
+      color: #203E9E;
       font-weight: 900;
     }
   }
@@ -65,8 +65,8 @@ export const NavItem = styled.div`
     props.$active &&
     `
     a {
-      background: #fff5ed;
-      color: #ff6b00;
+      background: #203E9E;
+      color: #fff;
     }
 
     a::before {
