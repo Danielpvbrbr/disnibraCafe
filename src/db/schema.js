@@ -15,11 +15,14 @@ export const produtos = pgTable("produtos", {
   descricao: text("descricao"), // NOVO CAMPO ADICIONADO AQUI
   foto: text("foto"),
 });
+
 export const mesas = pgTable("mesas", {
   id: serial("id").primaryKey(),
   nome: varchar("nome", { length: 100 }).notNull(),
-  status: varchar("status", { length: 50 }).default("ABERTA").notNull(), // ABERTA, FECHANDO
-  infoPagamento: varchar("info_pagamento", { length: 255 }), // Ex: "Pix + Cartão"
+  status: varchar("status", { length: 50 }).default("LIVRE").notNull(),
+  clienteNome: varchar("cliente_nome", { length: 255 }), // <-- Confirme se tem esta linha
+  clienteTelefone: varchar("cliente_telefone", { length: 50 }), // <-- E esta linha
+  infoPagamento: varchar("info_pagamento", { length: 255 }),
 });
 
 export const pedidos = pgTable("pedidos", {

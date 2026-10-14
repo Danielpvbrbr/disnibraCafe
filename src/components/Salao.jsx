@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useTransition, useRef } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { criarMesa, listarMesas, fecharContaMesa } from "@/app/actions/mesas";
+import { criarMesa, listarMesas, fecharContaMesa, limparMesaForcado } from "@/app/actions/mesas";
 import { listarPedidosDaMesa } from "@/app/actions/pedidos";
 
 // Som de Alerta Bruto de PDV (BEEP BEEP)
@@ -111,6 +111,17 @@ export default function Salao() {
     });
   };
 
+  // NOVO: Garçom limpa/desocupa a mesa sem cobrar (expulsa curioso e cancela pendentes)
+  const handleLimparMesa = () => {
+    if (confirm(`Deseja realmente limpar e desocupar a ${mesaPDV.nome}? Isso desconectará o celular do cliente e cancelará pedidos pendentes.`)) {
+      startTransition(async () => {
+        await limparMesaForcado(mesaPDV.id, mesaPDV.nome);
+        setMesaPDV(null);
+        carregarMesas();
+      });
+    }
+  };
+
   const formatarMoeda = (valor) => {
     const apenasNumeros = valor.replace(/\D/g, "");
     return (Number(apenasNumeros) / 100).toLocaleString("pt-BR", { style: "decimal", minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -211,17 +222,33 @@ export default function Salao() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 content-start">
           {tables.map((table) => {
             const isFechando = table.status === "FECHANDO";
+            const isOcupada = Boolean(table.clienteTelefone) && !isFechando;
 
             return (
-              <div key={table.id} className={`rounded-md flex flex-col overflow-hidden shadow-sm border-2 ${isFechando ? 'border-red-500 bg-red-50 animate-pulse' : 'border-slate-300 bg-white'}`}>
+              <div key={table.id} className={`rounded-md flex flex-col overflow-hidden shadow-sm border-2 ${isFechando ? 'border-red-500 bg-red-50 animate-pulse' : isOcupada ? 'border-blue-500 bg-white' : 'border-slate-300 bg-white'}`}>
 
                 {/* Header da Mesa */}
-                <div className={`flex items-center justify-between px-3 py-2 text-white border-b ${isFechando ? 'bg-red-600 border-red-700' : 'bg-slate-800 border-slate-900'}`}>
+                <div className={`flex items-center justify-between px-3 py-2 text-white border-b ${isFechando ? 'bg-red-600 border-red-700' : isOcupada ? 'bg-blue-700 border-blue-800' : 'bg-slate-800 border-slate-900'}`}>
                   <h3 className="text-sm font-bold tracking-wide uppercase truncate pr-2">{table.nome}</h3>
                   {isFechando ? (
                     <span className="text-[9px] font-black uppercase text-white bg-red-800 px-1.5 py-0.5 rounded-sm">CONTA</span>
+                  ) : isOcupada ? (
+                    <span className="text-[9px] font-black uppercase text-blue-100 bg-blue-900 px-1.5 py-0.5 rounded-sm">OCUPADA</span>
                   ) : (
                     <span className="text-[9px] font-bold uppercase text-emerald-400 bg-slate-900 px-1.5 py-0.5 rounded-sm">LIVRE</span>
+                  )}
+                </div>
+
+                {/* Faixa identificando o Cliente e a Senha (4 dígitos) */}
+                <div className="bg-slate-100 px-2 py-1 border-b border-slate-200 text-center">
+                  {table.clienteNome ? (
+                    <p className="text-[10px] font-bold text-slate-700 uppercase truncate" title={table.clienteNome}>
+                      👤 {table.clienteNome.split(" ")[0]} • PIN: <span className="text-blue-700 font-black">{table.clienteTelefone?.slice(-4)}</span>
+                    </p>
+                  ) : (
+                    <p className="text-[10px] font-bold text-slate-400 uppercase">
+                      Sem Cliente
+                    </p>
                   )}
                 </div>
 
@@ -278,9 +305,29 @@ export default function Salao() {
 
             {/* Esquerda: Extrato da Mesa */}
             <div className="w-1/2 flex flex-col bg-slate-50 border-r border-slate-300">
-              <div className="bg-slate-800 px-4 py-3 text-white">
+              <div className="bg-slate-800 px-4 py-3 text-white flex justify-between items-center">
                 <h2 className="text-sm font-black uppercase tracking-widest">Extrato: {mesaPDV.nome}</h2>
+                {mesaPDV.clienteTelefone && (
+                  <span className="text-[10px] bg-slate-700 px-2 py-0.5 rounded-sm font-mono text-emerald-400">
+                    PIN: {mesaPDV.clienteTelefone.slice(-4)}
+                  </span>
+                )}
               </div>
+
+              {/* Informações do Cliente Logado na Mesa */}
+              {mesaPDV.clienteNome && (
+                <div className="bg-slate-200/70 px-4 py-2 border-b border-slate-300 flex justify-between items-center">
+                  <div>
+                    <span className="text-[9px] font-bold text-slate-500 uppercase block">Cliente Responsável</span>
+                    <span className="text-xs font-black text-slate-800 uppercase">{mesaPDV.clienteNome}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[9px] font-bold text-slate-500 uppercase block">Telefone</span>
+                    <span className="text-xs font-bold text-slate-700">{mesaPDV.clienteTelefone}</span>
+                  </div>
+                </div>
+              )}
+
               <div className="flex-1 overflow-y-auto p-4 space-y-3">
                 {/* AQUI: Se não tiver pedido, avisa! */}
                 {pedidosPDV.length === 0 ? (
@@ -303,6 +350,19 @@ export default function Salao() {
                   ))
                 )}
               </div>
+
+              {/* Botão para o Garçom expulsar curioso ou limpar mesa sem precisar faturar */}
+              {(mesaPDV.clienteNome || pedidosPDV.length > 0) && (
+                <div className="p-3 border-t border-slate-300 bg-slate-100">
+                  <button
+                    onClick={handleLimparMesa}
+                    disabled={isPending}
+                    className="w-full py-2.5 bg-red-100 hover:bg-red-200 text-red-700 border border-red-300 text-xs font-black uppercase tracking-wider rounded-sm transition-colors"
+                  >
+                    🗑️ Limpar / Desocupar Mesa (Sem Cobrar)
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Direita: PDV Pagamento */}
