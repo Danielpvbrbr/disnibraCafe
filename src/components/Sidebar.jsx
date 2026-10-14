@@ -1,6 +1,6 @@
 "use client";
 
-export default function Sidebar({ telaAtiva, setTelaAtiva, onLogout }) {
+export default function Sidebar({ telaAtiva, setTelaAtiva, onLogout, nomeUsuario }) {
   const navItems = [
     { 
       id: "pedidos", 
@@ -24,12 +24,24 @@ export default function Sidebar({ telaAtiva, setTelaAtiva, onLogout }) {
     },
   ];
 
+  // Função para encurtar "Daniel do Nascimento" -> "Daniel N."
+  const formatarNomeCompacto = (nome) => {
+    if (!nome) return "User";
+    // Remove palavras de ligação para pegar o sobrenome real
+    const partes = nome.trim().split(" ").filter(p => !["de", "do", "da", "dos", "das"].includes(p.toLowerCase()));
+    
+    if (partes.length === 1) return partes[0].substring(0, 10);
+    return `${partes[0]} ${partes[1].charAt(0)}.`;
+  };
+
   return (
     <aside className="fixed top-0 left-0 z-50 h-full w-24 bg-slate-900 border-r border-slate-800 flex flex-col items-center py-4">
       
-      {/* Aqui ficava a caixinha feia do GP. Agora é só o texto (Ou sua logo em PNG no futuro) */}
+      {/* Texto Limpo do Sistema */}
       <div className="mb-8 mt-2 text-center">
-        <span className="font-black text-xs text-white uppercase tracking-widest leading-none block">Gestor<br/>Pedidos</span>
+        <span className="font-black text-xs text-white uppercase tracking-widest leading-none block">
+          Gestor<br/>Pedidos
+        </span>
       </div>
 
       <nav className="flex flex-col gap-1.5 w-full px-2">
@@ -57,18 +69,29 @@ export default function Sidebar({ telaAtiva, setTelaAtiva, onLogout }) {
         })}
       </nav>
 
-      {/* Botão de Logout no Rodapé */}
-      <div className="mt-auto w-full px-2">
+      {/* RODAPÉ DO USUÁRIO */}
+      <div className="mt-auto w-full px-2 border-t border-slate-800 pt-3 flex flex-col items-center">
+        
+        {/* Nome do Logado */}
+        <span 
+          className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center truncate w-full px-1 mb-1" 
+          title={nomeUsuario}
+        >
+          {formatarNomeCompacto(nomeUsuario)}
+        </span>
+
+        {/* Botão de Logout */}
         <button 
           onClick={onLogout}
           title="Sair do Sistema"
-          className="flex flex-col items-center justify-center w-full h-12 rounded-sm text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors"
+          className="flex flex-col items-center justify-center w-full h-10 rounded-sm text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
           </svg>
         </button>
       </div>
+
     </aside>
   );
 }

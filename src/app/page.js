@@ -5,23 +5,26 @@ import Sidebar from "@/components/Sidebar";
 import Pedidos from "@/components/Pedidos";
 import Salao from "@/components/Salao";
 import Cardapio from "@/components/Cardapio";
+import Relatorios from "@/components/Relatorios";
 import Login from "@/components/Login";
 import Cadastro from "@/components/Cadastro";
 
 export default function App() {
   const [isAutenticado, setIsAutenticado] = useState(false);
-  const [isLoadingAuth, setIsLoadingAuth] = useState(true); // Controla o "piscar" da tela
+  const [nomeUsuario, setNomeUsuario] = useState(""); // NOVO: Guarda o nome do logado
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [telaAtiva, setTelaAtiva] = useState("pedidos");
   const [exibirCadastro, setExibirCadastro] = useState(false);
 
-  // 1. Ao abrir o site, verifica se o usuário tem o cookie salvo
   useEffect(() => {
     const verificarCookie = () => {
       const cookies = document.cookie.split(';');
-      // Procura pelo nosso cookie específico
-      const temCookie = cookies.some(c => c.trim().startsWith('disnibra_auth='));
+      const cookieAuth = cookies.find(c => c.trim().startsWith('disnibra_auth='));
 
-      if (temCookie) {
+      if (cookieAuth) {
+        // Extrai o nome decodificando o texto do cookie
+        const nome = decodeURIComponent(cookieAuth.split('=')[1]);
+        setNomeUsuario(nome);
         setIsAutenticado(true);
       }
       setIsLoadingAuth(false);
@@ -30,20 +33,18 @@ export default function App() {
     verificarCookie();
   }, []);
 
-  // 2. Quando logar com sucesso, grava o cookie
-  const handleLogin = (nomeUsuario) => {
-    // max-age=86400 equivale a 24 horas (60s * 60m * 24h)
-    document.cookie = `disnibra_auth=${encodeURIComponent(nomeUsuario)}; max-age=86400; path=/`;
+  const handleLogin = (nomeLogin) => {
+    document.cookie = `disnibra_auth=${encodeURIComponent(nomeLogin)}; max-age=86400; path=/`;
+    setNomeUsuario(nomeLogin);
     setIsAutenticado(true);
   };
 
-  // 3. Função para deslogar (apagamos o cookie definindo max-age=0)
   const handleLogout = () => {
     document.cookie = "disnibra_auth=; max-age=0; path=/";
+    setNomeUsuario("");
     setIsAutenticado(false);
   };
 
-  // Tela de carregamento escurecida enquanto verifica o cookie
   if (isLoadingAuth) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
@@ -53,29 +54,22 @@ export default function App() {
       </div>
     );
   }
-
-  // Roteamento se não estiver logado
-  if (!isAutenticado) {
+  if (!isAutenticado) {//admin123
     if (exibirCadastro) {
       return <Cadastro onVoltar={() => setExibirCadastro(false)} />;
     }
 
     return (
       <div className="relative">
-        {/* Passamos o handleLogin para o componente Login */}
-        <Login onLogin={handleLogin} />
-
-        <button
-          onClick={() => setExibirCadastro(true)}
-          className="absolute top-4 right-4 text-xs font-bold text-slate-400 hover:text-white uppercase tracking-wider transition-colors"
-        >
-          Criar Primeiro Usuário
-        </button>
+        {/* Passamos o onAbrirCadastro para o componente de Login */}
+        <Login
+          onLogin={handleLogin}
+          onAbrirCadastro={() => setExibirCadastro(true)}
+        />
       </div>
     );
   }
 
-  // Se estiver logado, renderiza o sistema interno
   const renderizarTela = () => {
     switch (telaAtiva) {
       case "pedidos": return <Pedidos />;
@@ -88,11 +82,11 @@ export default function App() {
 
   return (
     <div className="flex h-screen bg-slate-50 text-slate-900 antialiased overflow-hidden">
-      {/* Passamos o handleLogout para a Sidebar ter o botão de sair */}
       <Sidebar
         telaAtiva={telaAtiva}
         setTelaAtiva={setTelaAtiva}
         onLogout={handleLogout}
+        nomeUsuario={nomeUsuario} // MANDANDO O NOME PARA A SIDEBAR
       />
 
       <main className="flex-1 ml-24 h-screen overflow-y-auto">
